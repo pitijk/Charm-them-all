@@ -9,6 +9,20 @@
 #ifndef Player_hpp
 #define Player_hpp
 
-#include <stdio.h>
+#include <SFML/Graphics.hpp>
 
+class Player {
+public:
+    int hp;
+    sf::CircleShape body;
+    int player_speed;
+    sf::Font font;
+    sf::Text text;
+    sf::Texture texture;
+    Player(sf::Vector2f position);
+    ~Player();
+    
+    void Update();
+    void Draw(sf::RenderWindow& window);
+};
 #endif /* Player_hpp */

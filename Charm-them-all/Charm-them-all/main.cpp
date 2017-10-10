@@ -19,18 +19,14 @@
 // Here is a small helper for you ! Have a look.
 #include "ResourcePath.hpp"
 
+#include "Player.hpp"
+
 int main(int, char const**)
 {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML window");
-
-    // Create a graphical text to display
-    sf::Font font;
-    if (!font.loadFromFile(resourcePath() + "sansation.ttf")) {
-        return EXIT_FAILURE;
-    }
-    sf::Text text("Pozdrawiam mame", font, 100);
-    text.setColor(sf::Color::Black);
+    window.setFramerateLimit(60);
+    Player player(sf::Vector2f(500,500));
 
     // Start the game loop
     while (window.isOpen())
@@ -52,9 +48,11 @@ int main(int, char const**)
 
         // Clear screen
         window.clear(sf::Color::White);
-
-        // Draw the string
-        window.draw(text);
+        
+        // Update
+        player.Update();
+        // Draw
+        player.Draw(window);
 
         // Update the window
         window.display();

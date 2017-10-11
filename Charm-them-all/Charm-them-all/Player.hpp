@@ -10,18 +10,20 @@
 #define Player_hpp
 
 #include <SFML/Graphics.hpp>
+#include "Charm.hpp"
 
 class Player {
 public:
     int hp;
     sf::CircleShape body;
-    int player_speed;
+    int speed;
     sf::Font font;
     sf::Text text;
     sf::Texture texture;
+    std::vector<Charm*> charms;
+    int charm_cooldown;
     Player(sf::Vector2f position);
     ~Player();
-    
     void Update();
     void Draw(sf::RenderWindow& window);
 };

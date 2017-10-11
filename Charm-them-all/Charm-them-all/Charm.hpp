@@ -9,6 +9,18 @@
 #ifndef Charm_hpp
 #define Charm_hpp
 
-#include <stdio.h>
+#include <SFML/Graphics.hpp>
+class Charm {
+public:
+    int speed;
+    int lifetime;
+    int direction;
+    sf::CircleShape body;
+    
+    Charm(sf::CircleShape player,int direction);
+    ~Charm();
+    void Update();
+    void Draw(sf::RenderWindow& window);
+};
 
 #endif /* Charm_hpp */

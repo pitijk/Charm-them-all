@@ -5,17 +5,17 @@
 //  Created by Piotrek Kiełek on 10/10/17.
 //  Copyright © 2017 Piotrek Kiełek. All rights reserved.
 //
-
+#include <iostream>
 #include "Player.hpp"
 #include "Settings.h"
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "ResourcePath.hpp"
-#include <cmath>
+#include "Charm.hpp"
 
 Player::Player(sf::Vector2f position){
     hp = HP;
-    player_speed = PLAYER_SPEED;
+    speed = PLAYER_SPEED;
     body.setRadius(PLAYER_BODY_RADIUS);
     body.setPosition(position);
     body.setOrigin(body.getRadius(), body.getRadius());
@@ -36,20 +36,50 @@ Player::~Player(){
 
 void Player::Update(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        body.move(-player_speed,0);
+        body.move(-speed,0);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        body.move(player_speed,0);
+        body.move(speed,0);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        body.move(0,-player_speed);
+        body.move(0,-speed);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        body.move(0,player_speed);
+        body.move(0,speed);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && charm_cooldown <=0 ) {
+        charms.push_back(new Charm(body,2));
+        charm_cooldown = CHARM_COOLDOWN;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && charm_cooldown <=0) {
+        charms.push_back(new Charm(body,4));
+        charm_cooldown = CHARM_COOLDOWN;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && charm_cooldown <=0) {
+        charms.push_back(new Charm(body,1));
+        charm_cooldown = CHARM_COOLDOWN;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && charm_cooldown <=0) {
+        charms.push_back(new Charm(body,3));
+        charm_cooldown = CHARM_COOLDOWN;
+    }
+    charm_cooldown--;
+    for (int i = 0; i < charms.size(); i++) {
+        charms[i]->Update();
+    }
+    for (int i = 0; i < charms.size(); i++) {
+        charms[i]->lifetime -= 1;
+        if (charms[i]->lifetime <= 0) {
+            //charms[i]->~Charm();
+            charms.erase(charms.begin() + i);
+        }
     }
 }
 
 void Player::Draw(sf::RenderWindow& window){
     window.draw(body);
     window.draw(text);
+    for (int i = 0; i < charms.size(); i++) {
+        charms[i]->Draw(window);
+    }
 }

@@ -83,3 +83,7 @@ void Player::Draw(sf::RenderWindow& window){
         charms[i]->Draw(window);
     }
 }
+
+sf::Vector2f Player::getPosition() {
+    return body.getPosition();
+}

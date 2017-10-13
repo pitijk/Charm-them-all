@@ -11,4 +11,23 @@
 
 #include <stdio.h>
 
+#include "Player.hpp"
+#include "Enemy.hpp"
+
+class GameEngine{
+public:
+    static GameEngine* Instance();
+    Player* getPlayer();
+    void Draw(sf::RenderWindow& window);
+    void Update();
+    
+private:
+    Player* _player;
+    std::vector<Enemy*> _enemies;
+    GameEngine();
+    GameEngine(GameEngine const&){};
+    GameEngine& operator=(GameEngine const&){};
+    static GameEngine* _Instance;
+};
+
 #endif /* GameEngine_hpp */

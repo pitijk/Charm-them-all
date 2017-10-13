@@ -17,8 +17,8 @@ Player::Player(sf::Vector2f position){
     hp = HP;
     speed = PLAYER_SPEED;
     body.setRadius(PLAYER_BODY_RADIUS);
-    body.setPosition(position);
     body.setOrigin(body.getRadius(), body.getRadius());
+    body.setPosition(position);
     body.setFillColor(sf::Color::Blue);
     //Hp display
     
@@ -70,7 +70,7 @@ void Player::Update(){
     for (int i = 0; i < charms.size(); i++) {
         charms[i]->lifetime -= 1;
         if (charms[i]->lifetime <= 0) {
-            //charms[i]->~Charm();
+            delete charms[i];
             charms.erase(charms.begin() + i);
         }
     }

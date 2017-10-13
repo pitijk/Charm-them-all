@@ -9,6 +9,20 @@
 #ifndef Enemy_hpp
 #define Enemy_hpp
 
-#include <stdio.h>
+#include <SFML/Graphics.hpp>
+class Enemy {
+public:
+    sf::Texture texture;
+    sf::CircleShape corp;
+    int speed;
+    bool charmed;
+    int charm_time;
+    
+    Enemy(sf::Vector2f position);
+    ~Enemy();
+    void Update(sf::Vector2f position);
+    void Draw(sf::RenderWindow& window);
+    sf::Vector2f movet(float rotation);
+};
 
 #endif /* Enemy_hpp */

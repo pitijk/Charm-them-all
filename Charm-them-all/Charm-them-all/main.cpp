@@ -20,14 +20,14 @@
 #include "ResourcePath.hpp"
 
 #include "Player.hpp"
-
+#include "Enemy.hpp"
 int main(int, char const**)
 {
     // Create the main window
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML window");
     window.setFramerateLimit(60);
     Player player(sf::Vector2f(500,500));
-
+    Enemy enemy(sf::Vector2f(1000,1000));
     // Start the game loop
     while (window.isOpen())
     {
@@ -51,9 +51,10 @@ int main(int, char const**)
         
         // Update
         player.Update();
+        enemy.Update(player.body.getPosition());
         // Draw
         player.Draw(window);
-
+        enemy.Draw(window);
         // Update the window
         window.display();
     }

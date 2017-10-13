@@ -18,7 +18,6 @@ public:
     sf::CircleShape body;
     
     Charm(sf::CircleShape player,int direction);
-    ~Charm();
     void Update();
     void Draw(sf::RenderWindow& window);
 };

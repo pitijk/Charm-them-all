@@ -13,10 +13,9 @@
 
 Charm::Charm(sf::CircleShape player,int direction){
     body.setRadius(CHARM_BODY_RADIUS);
-    body.setPosition(player.getPosition());
     body.setOrigin(body.getRadius(), body.getRadius());
+    body.setPosition(player.getPosition());
     body.setFillColor(sf::Color::Magenta);
-    
     this->direction = direction;
     speed = CHARM_SPEED;
     lifetime = CHARM_LIFETIME;

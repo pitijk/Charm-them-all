@@ -26,5 +26,6 @@ public:
     ~Player();
     void Update();
     void Draw(sf::RenderWindow& window);
+    sf::Vector2f getPosition();
 };
 #endif /* Player_hpp */

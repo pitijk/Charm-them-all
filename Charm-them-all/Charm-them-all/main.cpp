@@ -21,13 +21,15 @@
 
 #include "Player.hpp"
 #include "Enemy.hpp"
+#include "Settings.h"
+#include "GameEngine.hpp"
 int main(int, char const**)
 {
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML window");
-    window.setFramerateLimit(60);
-    Player player(sf::Vector2f(500,500));
-    Enemy enemy(sf::Vector2f(1000,1000));
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH,WINDOW_HEIGHT), "SFML window");
+    window.setFramerateLimit(FRAME_RATE);
+    sf::View view1(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+    GameEngine gameEngine;
     // Start the game loop
     while (window.isOpen())
     {
@@ -50,11 +52,9 @@ int main(int, char const**)
         window.clear(sf::Color::White);
         
         // Update
-        player.Update();
-        enemy.Update(player.body.getPosition());
+        gameEngine.Update();
         // Draw
-        player.Draw(window);
-        enemy.Draw(window);
+        gameEngine.Draw(window);
         // Update the window
         window.display();
     }

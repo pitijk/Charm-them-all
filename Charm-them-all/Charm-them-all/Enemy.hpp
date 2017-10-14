@@ -17,10 +17,11 @@ public:
     int speed;
     bool charmed;
     int charm_time;
+    sf::Vector2f target;
     
     Enemy(sf::Vector2f position);
     ~Enemy();
-    void Update(sf::Vector2f position);
+    void Update();
     void Draw(sf::RenderWindow& window);
     sf::Vector2f movet(float rotation);
 };

@@ -22,7 +22,13 @@ static int CHARM_LIFETIME = 20;
 
 // ENEMY
 static int ENEMY_CORP_RADIUS = 40;
-static int NORMAL_ENEMY_SPEED = 4;
+static int NORMAL_ENEMY_SPEED = 5;
 static int CHARMED_ENEMY_SPEED = 3;
-static int CHARMP_LENGHT = 120;
+static int CHARMP_LENGHT = 140;
+static int SPAWN_COOLDOWN = 180;
+
+// WINDOW
+static int WINDOW_WIDTH = 1920;
+static int WINDOW_HEIGHT = 1080;
+static int FRAME_RATE= 60;
 #endif /* Settings_h */

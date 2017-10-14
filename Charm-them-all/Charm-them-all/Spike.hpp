@@ -9,6 +9,14 @@
 #ifndef Spike_hpp
 #define Spike_hpp
 
-#include <stdio.h>
+#include <SFML/Graphics.hpp>
+
+class Spike {
+public:
+    sf::CircleShape body;
+    
+    Spike(sf::Vector2f position);
+    void Draw(sf::RenderWindow& window);
+};
 
 #endif /* Spike_hpp */

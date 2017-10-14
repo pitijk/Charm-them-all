@@ -20,6 +20,8 @@ Player::Player(sf::Vector2f position){
     body.setOrigin(body.getRadius(), body.getRadius());
     body.setPosition(position);
     body.setFillColor(sf::Color::Blue);
+    hurt_cooldown = 0;
+    immune = false;
     //Hp display
     
     font.loadFromFile(resourcePath() + "sansation.ttf");
@@ -47,19 +49,19 @@ void Player::Update(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         body.move(0,speed);
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && charm_cooldown <=0 ) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,2));
         charm_cooldown = CHARM_COOLDOWN;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && charm_cooldown <=0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,4));
         charm_cooldown = CHARM_COOLDOWN;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && charm_cooldown <=0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,1));
         charm_cooldown = CHARM_COOLDOWN;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && charm_cooldown <=0) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,3));
         charm_cooldown = CHARM_COOLDOWN;
     }
@@ -74,6 +76,20 @@ void Player::Update(){
             charms.erase(charms.begin() + i);
         }
     }
+    text.setString(std::to_string(hp));
+    hurt_cooldown--;
+    if (hurt_cooldown > 0) {
+        immune = true;
+        if (hurt_cooldown % 2 == 0) {
+            body.setFillColor(sf::Color::Blue);
+        }else
+            body.setFillColor(sf::Color::White);
+    }else{
+        body.setFillColor(sf::Color::Blue);
+        immune = false;
+    }
+    
+    std::cout << hurt_cooldown << std::endl;
 }
 
 void Player::Draw(sf::RenderWindow& window){
@@ -83,3 +99,12 @@ void Player::Draw(sf::RenderWindow& window){
         charms[i]->Draw(window);
     }
 }
+
+void Player::hurt(){
+    if (hurt_cooldown <= 0) {
+        hp--;
+        hurt_cooldown = PLAYER_HURT_COOLDOWN;
+    }
+}
+
+

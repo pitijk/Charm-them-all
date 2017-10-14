@@ -13,15 +13,17 @@
 #include "Charm.hpp"
 #include "Player.hpp"
 #include "Enemy.hpp"
+#include "Spike.hpp"
 class GameEngine {
 public:
     int spawn_cooldown;
     Player* player;
     std::vector<Charm*> charms;
     std::vector<Enemy*> enemies;
-    
+    std::vector<Spike*> spikes;
     GameEngine();
     sf::Vector2f giveRandom();
+    void set_up_spikes();
     void Update();
     void Draw(sf::RenderWindow& window);
     bool isColliding(sf::CircleShape one,sf::CircleShape two);

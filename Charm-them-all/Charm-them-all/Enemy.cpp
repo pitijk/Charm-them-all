@@ -18,7 +18,7 @@ Enemy::Enemy(sf::Vector2f position){
     corp.setOrigin(corp.getRadius(), corp.getRadius());
     corp.setPosition(position);
     corp.setFillColor(sf::Color::Red);
-    charmed = true;
+    charmed = false;
     charm_time = CHARMP_LENGHT;
     target = position;
 }
@@ -28,7 +28,6 @@ Enemy::~Enemy(){
 }
 
 void Enemy::Update(){
-    cout << target.x << " , " << target.y << endl;
     sf::Vector2f position = target;
     double angle = atan(fabs(position.x - corp.getPosition().x)/
                         fabs(position.y - corp.getPosition().y))*180/3.14;
@@ -40,14 +39,13 @@ void Enemy::Update(){
     }
     if (charmed) {
         corp.setFillColor(sf::Color::Magenta);
-        charm_time--;
-    }else
-        corp.setFillColor(sf::Color::Red);
-    if(charmed)
         speed = CHARMED_ENEMY_SPEED;
-    else
+        charm_time--;
+    }else{
+        corp.setFillColor(sf::Color::Red);
         speed = NORMAL_ENEMY_SPEED;
-    
+    }
+
         if ((position.x - corp.getPosition().x)>0) {
             if ((position.y - corp.getPosition().y)>0) {
                 corp.setRotation(90 - angle);

@@ -26,5 +26,8 @@ public:
     ~Player();
     void Update();
     void Draw(sf::RenderWindow& window);
+    void hurt();
+    int hurt_cooldown;
+    bool immune;
 };
 #endif /* Player_hpp */

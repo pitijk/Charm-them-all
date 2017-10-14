@@ -22,8 +22,9 @@ using namespace std;
 
 GameEngine::GameEngine(){
     player = new Player(sf::Vector2f(WINDOW_WIDTH/2,WINDOW_HEIGHT/2));
-    enemies.push_back(new Enemy(sf::Vector2f(1000,1000)));
-    spawn_cooldown = 0;
+    spawn_cooldown = SPAWN_COOLDOWN;
+    set_up_spikes();
+    charms = player->charms;
     srand( time( NULL ) );
 }
 
@@ -31,28 +32,70 @@ void GameEngine::Update(){
     spawn_cooldown++;
     if (spawn_cooldown >= SPAWN_COOLDOWN) {
         enemies.push_back(new Enemy(giveRandom()));
-        
         spawn_cooldown = 0;
+        for (int i = 0; i < spikes.size(); i++) {
+            while (isColliding(enemies[enemies.size()-1]->corp,spikes[i]->body) ||
+                   isColliding(enemies[enemies.size()-1]->corp,player->body)) {
+                enemies[enemies.size()-1]->corp.setPosition(giveRandom());
+            }
+        }
     }
-    player->Update();
+    for (int i = 0; i < spikes.size(); i++) {
+        if(isColliding(player->body, spikes[i]->body))
+            player->hurt();
+    }
+    charms = player->charms;
     for (int i = 0; i < enemies.size(); i++) {
+        for (int j = 0; j < charms.size(); j++) {
+            if (isColliding(enemies[i]->corp, charms[j]->body)) {
+                enemies[i]->charmed = true;
+                enemies[i]->charm_time = CHARMP_LENGHT;
+                charms[j]->lifetime = 0;
+                break;
+            }
+        }
+        if (isColliding(player->body, enemies[i]->corp) && !player->immune) {
+            player->hurt();
+            delete enemies[i];
+            enemies.erase(enemies.begin() + i);
+            continue;
+        }
         if (enemies[i]->charmed) {
             enemies[i]->target = player->body.getPosition();
         }else{
-            if (is_near(enemies[i]->corp, enemies[i]->target)) { //enemies[i]->time_to_chane_direction <= 0 ||
+            if (is_near(enemies[i]->corp, enemies[i]->target))
                 enemies[i]->target = giveRandom();
-                //enemies[i]->time_to_chane_direction = ((rand() % 60) + 60);
+        }
+        for (int j = 0; j < spikes.size(); j++) {
+            if (isColliding(enemies[i]->corp,spikes[j]->body)) {
+                if (enemies[i]->charmed) {
+                    delete enemies[i];
+                    enemies.erase(enemies.begin() + i);
+                    continue;
+                }else{
+                    sf::Vector2f position = enemies[i]->corp.getPosition();
+                    while (isColliding(enemies[i]->corp,spikes[j]->body)) {
+                        enemies[i]->corp.setPosition(position);
+                        enemies[i]->target = giveRandom();
+                        enemies[i]->Update();
+                    }
+                    enemies[i]->corp.setPosition(position);
+                }
             }
         }
-            enemies[i]->Update();
+        enemies[i]->Update();
     }
+    player->Update();
 }
 
 void GameEngine::Draw(sf::RenderWindow& window){
-    player->Draw(window);
     for (int i = 0; i < enemies.size(); i++) {
         enemies[i]->Draw(window);
     }
+    for (int i = 0; i < spikes.size(); i++) {
+        spikes[i]->Draw(window);
+    }
+    player->Draw(window);
 }
 
 sf::Vector2f GameEngine::giveRandom(){
@@ -78,6 +121,15 @@ bool GameEngine::is_near(sf::CircleShape enemy, sf::Vector2f point){
         return true;
 }
 
-
+void GameEngine::set_up_spikes(){
+    for (int k = 1; k < 3; k++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                spikes.push_back(new Spike(sf::Vector2f(k*WINDOW_WIDTH/3  + i*SPIKE_BODY_RADIUS*2.5,
+                                                        WINDOW_HEIGHT/2 - SPIKE_BODY_RADIUS*2.5 + j*SPIKE_BODY_RADIUS*2.5) ));
+            }
+        }
+    }
+}
 
 

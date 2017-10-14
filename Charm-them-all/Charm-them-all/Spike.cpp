@@ -7,3 +7,15 @@
 //
 
 #include "Spike.hpp"
+#include "Settings.h"
+
+Spike::Spike(sf::Vector2f position){
+    body.setRadius(SPIKE_BODY_RADIUS);
+    body.setOrigin(body.getRadius(), body.getRadius());
+    body.setPosition(position);
+    body.setFillColor(sf::Color::Black);
+}
+
+void Spike::Draw(sf::RenderWindow &window){
+    window.draw(body);
+}

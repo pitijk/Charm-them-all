@@ -28,6 +28,11 @@ public:
     bool isColliding(sf::CircleShape one,sf::CircleShape two);
     bool is_near(sf::CircleShape enemy, sf::Vector2f point);
     bool conti;
+    int score;
+    sf::Font font;
+    sf::Text text;
+    void restart();
+    
 };
 
 #endif /* GameEngine_hpp */

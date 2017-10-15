@@ -16,6 +16,7 @@
 #include "Enemy.hpp"
 #include "Charm.hpp"
 #include "Settings.h"
+#include "ResourcePath.hpp"
 #include <iostream>
 
 using namespace std;
@@ -26,9 +27,17 @@ GameEngine::GameEngine(){
     set_up_spikes();
     srand( time( NULL ) );
     conti = false;
+    score = 0;
+    font.loadFromFile(resourcePath() + "sansation.ttf");
+    text.setFont(font);
+    text.setCharacterSize(70);
+    text.setColor(sf::Color::Red);
+    text.setString("Your score: " + to_string(score));
+    text.setPosition(WINDOW_WIDTH*0.7,20);
 }
 
 void GameEngine::Update(){
+if(player->hp > 0){
     spawn_cooldown++;
     if (spawn_cooldown >= SPAWN_COOLDOWN) {
         enemies.push_back(new Enemy(giveRandom()));
@@ -57,6 +66,7 @@ void GameEngine::Update(){
             player->hurt();
             delete enemies[i];
             enemies.erase(enemies.begin() + i);
+            score++;
             continue;
         }
         if (enemies[i]->charmed) {
@@ -70,8 +80,9 @@ void GameEngine::Update(){
                 if (enemies[i]->charmed) {
                     delete enemies[i];
                     enemies.erase(enemies.begin() + i);
-                    break;
+                    score++;
                     conti = true;
+                    break;
                 }else{
                     sf::Vector2f position = enemies[i]->corp.getPosition();
                     while (isColliding(enemies[i]->corp,spikes[j]->body)) {
@@ -87,17 +98,30 @@ void GameEngine::Update(){
             enemies[i]->Update();
     }
     conti = false;
+    text.setString("Your score: " + to_string(score));
     player->Update();
+}else{//if (hp > 0)
+    text.setString("             Your score: " + to_string(score) + "\nClick SPACE to playe again");
+    text.setPosition(WINDOW_WIDTH*0.28,WINDOW_HEIGHT*0.4);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        restart();
+}
+    
 }
 
 void GameEngine::Draw(sf::RenderWindow& window){
-    for (int i = 0; i < enemies.size(); i++) {
-        enemies[i]->Draw(window);
+    if (player->hp > 0) {
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies[i]->Draw(window);
+        }
+        for (int i = 0; i < spikes.size(); i++) {
+            spikes[i]->Draw(window);
+        }
+        player->Draw(window);
+        window.draw(text);
+    }else{
+        window.draw(text);
     }
-    for (int i = 0; i < spikes.size(); i++) {
-        spikes[i]->Draw(window);
-    }
-    player->Draw(window);
 }
 
 sf::Vector2f GameEngine::giveRandom(){
@@ -123,15 +147,33 @@ bool GameEngine::is_near(sf::CircleShape enemy, sf::Vector2f point){
         return true;
 }
 
+void GameEngine::restart(){
+    player->body.setPosition(WINDOW_WIDTH/2,WINDOW_HEIGHT/2);
+    player->hp = HP;
+    enemies.clear();
+    player->charms.clear();
+    conti = false;
+    score = 0;
+    text.setString("Your score: " + to_string(score));
+    text.setPosition(WINDOW_WIDTH*0.7,20);
+    spawn_cooldown = SPAWN_COOLDOWN;
+}
+
 void GameEngine::set_up_spikes(){
-    for (int k = 1; k < 3; k++) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                spikes.push_back(new Spike(sf::Vector2f(k*WINDOW_WIDTH/3  + i*SPIKE_BODY_RADIUS*2.5,
-                                                        WINDOW_HEIGHT/2 - SPIKE_BODY_RADIUS*2.5 + j*SPIKE_BODY_RADIUS*2.5) ));
-            }
+    int y = WINDOW_WIDTH/4;
+    int x = (WINDOW_WIDTH - 15 * SPIKE_BODY_RADIUS - y)/2;
+    int h = (WINDOW_HEIGHT - 7.5*SPIKE_BODY_RADIUS)/2 + WINDOW_HEIGHT*0.05;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            spikes.push_back(new Spike(sf::Vector2f(x + i*SPIKE_BODY_RADIUS*2.5,h+j*SPIKE_BODY_RADIUS*2.5) ));
         }
     }
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            spikes.push_back(new Spike(sf::Vector2f(WINDOW_WIDTH-x-7.5*SPIKE_BODY_RADIUS + i*SPIKE_BODY_RADIUS*2.5,h+j*SPIKE_BODY_RADIUS*2.5) ));
+        }
+    }
+        
 }
 
 

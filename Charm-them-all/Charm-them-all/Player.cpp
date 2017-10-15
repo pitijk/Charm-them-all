@@ -28,8 +28,8 @@ Player::Player(sf::Vector2f position){
     text.setFont(font);
     text.setCharacterSize(70);
     text.setColor(sf::Color::Red);
-    text.setString(std::to_string(hp));
-    text.setPosition(20, 20);
+    text.setString("HP: " + std::to_string(hp));
+    text.setPosition(50, 20);
 }
 
 Player::~Player(){
@@ -76,7 +76,7 @@ void Player::Update(){
             charms.erase(charms.begin() + i);
         }
     }
-    text.setString(std::to_string(hp));
+    text.setString("HP: " + std::to_string(hp));
     hurt_cooldown--;
     if (hurt_cooldown > 0) {
         immune = true;

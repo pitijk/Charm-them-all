@@ -18,7 +18,6 @@ class GameEngine {
 public:
     int spawn_cooldown;
     Player* player;
-    std::vector<Charm*> charms;
     std::vector<Enemy*> enemies;
     std::vector<Spike*> spikes;
     GameEngine();
@@ -28,6 +27,7 @@ public:
     void Draw(sf::RenderWindow& window);
     bool isColliding(sf::CircleShape one,sf::CircleShape two);
     bool is_near(sf::CircleShape enemy, sf::Vector2f point);
+    bool conti;
 };
 
 #endif /* GameEngine_hpp */

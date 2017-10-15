@@ -24,8 +24,8 @@ GameEngine::GameEngine(){
     player = new Player(sf::Vector2f(WINDOW_WIDTH/2,WINDOW_HEIGHT/2));
     spawn_cooldown = SPAWN_COOLDOWN;
     set_up_spikes();
-    charms = player->charms;
     srand( time( NULL ) );
+    conti = false;
 }
 
 void GameEngine::Update(){
@@ -44,13 +44,12 @@ void GameEngine::Update(){
         if(isColliding(player->body, spikes[i]->body))
             player->hurt();
     }
-    charms = player->charms;
     for (int i = 0; i < enemies.size(); i++) {
-        for (int j = 0; j < charms.size(); j++) {
-            if (isColliding(enemies[i]->corp, charms[j]->body)) {
+        for (int j = 0; j < player->charms.size(); j++) {
+            if (isColliding(enemies[i]->corp, player->charms[j]->body)) {
                 enemies[i]->charmed = true;
                 enemies[i]->charm_time = CHARMP_LENGHT;
-                charms[j]->lifetime = 0;
+                player->charms[j]->lifetime = 0;
                 break;
             }
         }
@@ -71,7 +70,8 @@ void GameEngine::Update(){
                 if (enemies[i]->charmed) {
                     delete enemies[i];
                     enemies.erase(enemies.begin() + i);
-                    continue;
+                    break;
+                    conti = true;
                 }else{
                     sf::Vector2f position = enemies[i]->corp.getPosition();
                     while (isColliding(enemies[i]->corp,spikes[j]->body)) {
@@ -83,8 +83,10 @@ void GameEngine::Update(){
                 }
             }
         }
-        enemies[i]->Update();
+        if(!conti)
+            enemies[i]->Update();
     }
+    conti = false;
     player->Update();
 }
 

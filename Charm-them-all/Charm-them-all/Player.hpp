@@ -20,6 +20,7 @@ public:
     sf::Font font;
     sf::Text text;
     sf::Texture texture;
+    sf::Texture texture2;
     std::vector<Charm*> charms;
     int charm_cooldown;
     Player(sf::Vector2f position);

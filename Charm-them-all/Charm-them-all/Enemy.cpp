@@ -10,22 +10,21 @@
 #include "Settings.h"
 #include <cmath>
 #include <iostream>
-
+#include "ResourcePath.hpp"
 using namespace std;
 Enemy::Enemy(sf::Vector2f position){
     speed = NORMAL_ENEMY_SPEED;
     corp.setRadius(ENEMY_CORP_RADIUS);
     corp.setOrigin(corp.getRadius(), corp.getRadius());
     corp.setPosition(position);
-    corp.setFillColor(sf::Color::Red);
     charmed = false;
     charm_time = CHARMP_LENGHT;
     target = position;
+    texture.loadFromFile(resourcePath() +"enemy.png");
+    texture2.loadFromFile(resourcePath() +"enemy2.png");
+    corp.setTexture(&texture);
 }
 
-Enemy::~Enemy(){
-    
-}
 
 void Enemy::Update(){
     sf::Vector2f position = target;
@@ -38,11 +37,11 @@ void Enemy::Update(){
         target = corp.getPosition();
     }
     if (charmed) {
-        corp.setFillColor(sf::Color::Magenta);
+        corp.setTexture(&texture2);
         speed = CHARMED_ENEMY_SPEED;
         charm_time--;
     }else{
-        corp.setFillColor(sf::Color::Red);
+        corp.setTexture(&texture);
         speed = NORMAL_ENEMY_SPEED;
     }
 

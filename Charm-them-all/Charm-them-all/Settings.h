@@ -16,17 +16,17 @@ static int PLAYER_BODY_RADIUS = 50;
 static int PLAYER_HURT_COOLDOWN = 60;
 
 // CHARM
-static int CHARM_BODY_RADIUS = 40;
-static int CHARM_SPEED = 40;
+static int CHARM_BODY_RADIUS = 20;
+static int CHARM_SPEED = 35;
 static int CHARM_COOLDOWN = 40;
 static int CHARM_LIFETIME = 20;
 
 // ENEMY
-static int ENEMY_CORP_RADIUS = 40;
+static int ENEMY_CORP_RADIUS = 50;
 static int NORMAL_ENEMY_SPEED = 5;
 static int CHARMED_ENEMY_SPEED = 3;
 static int CHARMP_LENGHT = 120;
-static int SPAWN_COOLDOWN = 200; //200
+static int SPAWN_COOLDOWN = 170; //200
 
 // SPIKE
 static int SPIKE_BODY_RADIUS = 30;

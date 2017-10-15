@@ -19,9 +19,11 @@ Player::Player(sf::Vector2f position){
     body.setRadius(PLAYER_BODY_RADIUS);
     body.setOrigin(body.getRadius(), body.getRadius());
     body.setPosition(position);
-    body.setFillColor(sf::Color::Blue);
     hurt_cooldown = 0;
     immune = false;
+    texture.loadFromFile(resourcePath() +"player.png");
+    texture2.loadFromFile(resourcePath() +"player2.png");
+    body.setTexture(&texture);
     //Hp display
     
     font.loadFromFile(resourcePath() + "sansation.ttf");
@@ -39,31 +41,39 @@ Player::~Player(){
 void Player::Update(){
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         body.move(-speed,0);
+        body.setRotation(180);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         body.move(speed,0);
+        body.setRotation(0);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         body.move(0,-speed);
+        body.setRotation(270);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         body.move(0,speed);
+        body.setRotation(90);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,2));
         charm_cooldown = CHARM_COOLDOWN;
+        body.setRotation(270);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,4));
         charm_cooldown = CHARM_COOLDOWN;
+        body.setRotation(90);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,1));
         charm_cooldown = CHARM_COOLDOWN;
+        body.setRotation(180);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && charm_cooldown <=0 && !immune) {
         charms.push_back(new Charm(body,3));
         charm_cooldown = CHARM_COOLDOWN;
+        body.setRotation(0);
     }
     charm_cooldown--;
     for (int i = 0; i < charms.size(); i++) {
@@ -81,11 +91,11 @@ void Player::Update(){
     if (hurt_cooldown > 0) {
         immune = true;
         if (hurt_cooldown % 2 == 0) {
-            body.setFillColor(sf::Color::Blue);
+            body.setTexture(&texture);
         }else
-            body.setFillColor(sf::Color::White);
+            body.setTexture(&texture2);
     }else{
-        body.setFillColor(sf::Color::Blue);
+        body.setTexture(&texture);
         immune = false;
     }
     

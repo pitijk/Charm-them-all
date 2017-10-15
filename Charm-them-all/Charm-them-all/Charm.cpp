@@ -19,6 +19,8 @@ Charm::Charm(sf::CircleShape player,int direction){
     this->direction = direction;
     speed = CHARM_SPEED;
     lifetime = CHARM_LIFETIME;
+    texture.loadFromFile(resourcePath() +"charm.png");
+    body.setTexture(&texture);
 }
 
 void Charm::Update(){

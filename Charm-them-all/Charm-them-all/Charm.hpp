@@ -16,6 +16,7 @@ public:
     int lifetime;
     int direction;
     sf::CircleShape body;
+    sf::Texture texture;
     
     Charm(sf::CircleShape player,int direction);
     void Update();
